@@ -1,0 +1,37 @@
+{
+  "search_query": "location:Hyderabad followers:>190",
+  "total_users": 89,
+  "newest_user": {
+    "login": "Brahme27",
+    "html_url": "https://github.com/Brahme27",
+    "user_id": 184195611,
+    "note": "Visit profile to see exact join date"
+  },
+  "top_5_users": [
+    {
+      "login": "Brahme27",
+      "html_url": "https://github.com/Brahme27",
+      "user_id": 184195611
+    },
+    {
+      "login": "Mahas1234",
+      "html_url": "https://github.com/Mahas1234",
+      "user_id": 166636212
+    },
+    {
+      "login": "MuhammadHassaanArain",
+      "html_url": "https://github.com/MuhammadHassaanArain",
+      "user_id": 161812835
+    },
+    {
+      "login": "kiranShamsHere",
+      "html_url": "https://github.com/kiranShamsHere",
+      "user_id": 160856436
+    },
+    {
+      "login": "YadlaMani",
+      "html_url": "https://github.com/YadlaMani",
+      "user_id": 133841094
+    }
+  ]
+}

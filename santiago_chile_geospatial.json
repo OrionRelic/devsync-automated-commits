@@ -1,0 +1,23 @@
+{
+  "city": "Jeddah",
+  "country": "Saudi Arabia",
+  "osm_id": 614415380,
+  "osm_type": "way",
+  "display_name": "Jeddah Refinery, محافظة جدة, منطقة مكة المكرمة, السعودية",
+  "boundingbox": {
+    "min_latitude": 21.4404314,
+    "max_latitude": 21.4554502,
+    "min_longitude": 39.1796145,
+    "max_longitude": 39.1921377
+  },
+  "center": {
+    "latitude": 21.4481669,
+    "longitude": 39.1865309
+  },
+  "raw_boundingbox": [
+    "21.4404314",
+    "21.4554502",
+    "39.1796145",
+    "39.1921377"
+  ]
+}
