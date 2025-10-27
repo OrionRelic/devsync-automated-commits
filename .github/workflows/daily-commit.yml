@@ -1,0 +1,74 @@
+name: Daily Automated Commit
+
+on:
+  schedule:
+    # Runs daily at 09:30 UTC (specific hours/minutes as required)
+    - cron: '30 9 * * *'
+  workflow_dispatch:  # Allows manual triggering for testing
+
+jobs:
+  automated-commit:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+      
+      - name: Configure Git for 24f1002783@ds.study.iitm.ac.in
+        run: |
+          git config --local user.email "24f1002783@ds.study.iitm.ac.in"
+          git config --local user.name "DevSync Automation"
+      
+      - name: Create daily update file
+        run: |
+          # Create a logs directory if it doesn't exist
+          mkdir -p logs
+          
+          # Generate timestamp
+          TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          DATE=$(date -u +"%Y-%m-%d")
+          
+          # Create or update daily log file
+          echo "Daily automated update - $TIMESTAMP" >> logs/daily-updates.log
+          
+          # Create a dated activity file
+          cat > logs/activity-$DATE.txt << EOF
+          DevSync Daily Activity Report
+          ==============================
+          Date: $DATE
+          Timestamp: $TIMESTAMP
+          Status: Repository updated successfully
+          Workflow: Daily Automated Commit
+          Purpose: Activity tracking and automated documentation
+          EOF
+          
+          echo "✓ Daily update files created"
+      
+      - name: Commit and push changes
+        run: |
+          # Add all changes
+          git add logs/
+          
+          # Check if there are changes to commit
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            # Create commit with timestamp
+            TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+            git commit -m "chore: Daily automated update - $TIMESTAMP"
+            
+            # Push changes
+            git push origin main || git push origin master
+            
+            echo "✓ Changes committed and pushed successfully"
+          fi
+      
+      - name: Verify commit
+        run: |
+          echo "Latest commit:"
+          git log -1 --pretty=format:"%h - %an, %ar : %s"
+          echo ""
+          echo "✓ Daily automated commit workflow completed"
