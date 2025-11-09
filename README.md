@@ -2,17 +2,30 @@
 
 This repository is part of DevSync Solutions' automated workflow management system.
 
+## Contact Information
+
+**Email**: 24f1002783@ds.study.iitm.ac.in
+
 ## Purpose
 
-This repository demonstrates automated daily commits using GitHub Actions for:
-- Activity tracking
-- Automated documentation
-- Backup and recovery
-- Compliance and auditing
+This repository demonstrates automated workflows using GitHub Actions including:
+- Matrix builds with parallel execution
+- Activity tracking and automated commits
+- Automated documentation and artifact management
+- Backup, recovery, compliance and auditing
 
-## GitHub Actions Workflow
+## GitHub Actions Workflows
 
-The repository includes a scheduled GitHub Action (`daily-commit.yml`) that:
+### Matrix Build CI/CD Pipeline (`matrix-build.yml`)
+Demonstrates parallel matrix builds with artifact management:
+- **Matrix Strategy**: Builds across 3 operating systems (Ubuntu, macOS, Windows) and 2 Node.js versions (18, 20)
+- **Parallel Execution**: 6 parallel jobs running simultaneously
+- **Artifact Management**: Each job generates and uploads unique build artifacts
+- **Artifact Naming**: `build-c0dbac4-{os}-node{version}`
+- **Identifier**: Contains step with `matrix-c0dbac4` identifier
+
+### Daily Automated Commit (`daily-commit.yml`)
+Scheduled workflow that:
 - Runs daily at 09:30 UTC
 - Creates automated log files
 - Commits changes with timestamps
