@@ -9,20 +9,31 @@ on:
 
 jobs:
   matrix-build:
-    name: Build on ${{ matrix.os }} with Node ${{ matrix.node-version }}
+    name: Build ${{ matrix.variant }}
     runs-on: ${{ matrix.os }}
     
     strategy:
+      fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        node-version: [18, 20]
         include:
           - os: ubuntu-latest
-            artifact-name: linux
+            variant: linux-node18
+            node-version: 18
+          - os: ubuntu-latest
+            variant: linux-node20
+            node-version: 20
           - os: macos-latest
-            artifact-name: macos
+            variant: macos-node18
+            node-version: 18
+          - os: macos-latest
+            variant: macos-node20
+            node-version: 20
           - os: windows-latest
-            artifact-name: windows
+            variant: windows-node18
+            node-version: 18
+          - os: windows-latest
+            variant: windows-node20
+            node-version: 20
     
     steps:
       - name: Checkout repository
@@ -35,9 +46,10 @@ jobs:
       
       - name: matrix-c0dbac4
         run: |
-          echo "Building for ${{ matrix.os }} with Node.js ${{ matrix.node-version }}"
-          echo "Matrix configuration: OS=${{ matrix.os }}, Node=${{ matrix.node-version }}"
-          echo "Artifact identifier: ${{ matrix.artifact-name }}-node${{ matrix.node-version }}"
+          echo "Building variant: ${{ matrix.variant }}"
+          echo "Operating System: ${{ matrix.os }}"
+          echo "Node.js Version: ${{ matrix.node-version }}"
+          echo "Artifact will be: build-c0dbac4-${{ matrix.variant }}"
       
       - name: Display system information
         run: |
@@ -52,41 +64,39 @@ jobs:
           mkdir -p build-output
           echo "Build Information" > build-output/build-info.txt
           echo "==================" >> build-output/build-info.txt
+          echo "Variant: ${{ matrix.variant }}" >> build-output/build-info.txt
           echo "OS: ${{ matrix.os }}" >> build-output/build-info.txt
           echo "Node Version: ${{ matrix.node-version }}" >> build-output/build-info.txt
           echo "Build Date: $(date)" >> build-output/build-info.txt
           echo "Commit SHA: ${{ github.sha }}" >> build-output/build-info.txt
           echo "Repository: ${{ github.repository }}" >> build-output/build-info.txt
           echo "" >> build-output/build-info.txt
-          echo "Build successful for ${{ matrix.artifact-name }}-node${{ matrix.node-version }}" >> build-output/build-info.txt
+          echo "Build successful for variant ${{ matrix.variant }}" >> build-output/build-info.txt
         shell: bash
       
       - name: Create JSON build metadata
         run: |
-          cat > build-output/metadata.json << 'EOF'
-          {
-            "os": "${{ matrix.os }}",
-            "node_version": "${{ matrix.node-version }}",
-            "artifact_name": "${{ matrix.artifact-name }}",
-            "build_time": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-            "commit_sha": "${{ github.sha }}",
-            "workflow_run": "${{ github.run_number }}",
-            "status": "success"
-          }
-          EOF
+          echo "{" > build-output/metadata.json
+          echo "  \"variant\": \"${{ matrix.variant }}\"," >> build-output/metadata.json
+          echo "  \"os\": \"${{ matrix.os }}\"," >> build-output/metadata.json
+          echo "  \"node_version\": \"${{ matrix.node-version }}\"," >> build-output/metadata.json
+          echo "  \"commit_sha\": \"${{ github.sha }}\"," >> build-output/metadata.json
+          echo "  \"workflow_run\": \"${{ github.run_number }}\"," >> build-output/metadata.json
+          echo "  \"status\": \"success\"" >> build-output/metadata.json
+          echo "}" >> build-output/metadata.json
         shell: bash
       
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: build-c0dbac4-${{ matrix.artifact-name }}-node${{ matrix.node-version }}
+          name: build-c0dbac4-${{ matrix.variant }}
           path: build-output/
           retention-days: 30
       
       - name: Build summary
         run: |
           echo "✅ Build completed successfully"
-          echo "Artifact: build-c0dbac4-${{ matrix.artifact-name }}-node${{ matrix.node-version }}"
+          echo "Artifact: build-c0dbac4-${{ matrix.variant }}"
           echo "Files generated:"
           ls -lah build-output/
         shell: bash
